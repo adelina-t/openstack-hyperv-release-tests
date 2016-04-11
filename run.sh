@@ -296,11 +296,11 @@ export OS_PASSWORD=$DEVSTACK_PASSWORD
 export OS_TENANT_NAME=admin
 export OS_AUTH_URL=http://127.0.0.1:5000/v2.0
 
-git_repo_url="https://github.com/cloudbase/openstack-hyperv-release-tests"
+git_repo_url="https://github.com/adelina-t/openstack-hyperv-release-tests"
 repo_dir="C:\\Dev\\openstack-hyperv-release-tests"
 win_user=Administrator
 win_password=Passw0rd
-host_config_dir="\${ENV:ProgramFiles(x86)}\\Cloudbase Solutions\\OpenStack\\Nova\\etc"
+host_config_dir="\${ENV:ProgramFiles}\\Cloudbase Solutions\\OpenStack\\Nova\\etc"
 host_logs_dir="/OpenStack/Log"
 devstack_dir="$HOME/devstack"
 images_dir=$devstack_dir
