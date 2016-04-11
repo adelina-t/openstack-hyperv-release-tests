@@ -269,6 +269,20 @@ function enable_venv() {
     source "$venvdir/bin/activate"
 }
 
+function setup_cluster() {
+    echo "Setting up cluster on nodes $@"
+    local win_host=$1
+    run_wsman_ps $win_host "cd $repo_dir\\windows; .\\setupcluster.ps1 -ClusterNodes $@ -DiskWitnessShare \\192.168.78.10\witnessshare"
+    echo "Cluster set up."
+}
+
+function destroy_cluster() {
+    echo "Destroying cluster"
+    local win_host=$1
+    run_wsman_ps $win_host "cd $repo_dir\\windows; .\\destroycluster.ps1"
+    echo "Cluster destroyes"
+}
+
 msi_url=$1
 DEVSTACK_BRANCH=${2:-"stable/icehouse"}
 test_suite_override=${3}
@@ -408,6 +422,9 @@ do
         wait $pid
     done
 
+
+    setup_cluster $host_names
+
     for host_name in ${host_names[@]};
     do
         firewall_manage_ports $host_name add enable ${tcp_ports[@]}
@@ -464,7 +481,8 @@ do
         exec_with_retry 5 0 get_win_hotfixes_log $host_name "$test_logs_dir/$host_name/hotfixes.log" &
         pids+=("$!")
     done
-
+    destroy_cluster $host_names &
+    pids+=("$!")
     exec_with_retry 5 0 unstack_devstack $DEVSTACK_LOGS_DIR &
     pids+=("$!")
 

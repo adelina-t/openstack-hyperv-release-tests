@@ -1,273 +1,32 @@
-HyperVThreshold_VHDX:
-  test_suite: default
-  include_default: false
-  devstack:
-    live_migration: false
-    allow_resize_to_same_host: true
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
-  hosts:
-    NUCHVTHTP01:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: true
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-        SECURITYGROUP:
-          enable_security_group: true          
-HyperVThreshold_NIC_hotplug:
-  test_suite: nichotplug
-  include_default: false
-  devstack:
-    live_migration: false
-    allow_resize_to_same_host: true
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
-  hosts:
-    NUCHVTHTP01:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: true
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-        SECURITYGROUP:
-          enable_security_group: true
 HyperV2012r2_VHDX:
   test_suite: default
   devstack:
-    live_migration: true
+    live_migration: false
     allow_resize_to_same_host: false
     image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
     heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
   hosts:
-    NUCHV12R201:
+    HV12R201:
       nova.conf:
         DEFAULT:
           allow_resize_to_same_host: false
           debug: true
+          instances_path: 'Z:'
+          compute_driver: hyperv.nova.cluster.driver.HyperVClusterDriver
       neutron_hyperv_agent.conf:
         DEFAULT:
           debug: true
         SECURITYGROUP:
           enable_security_group: true
-    NUCHV12R202:
+    HV12R202:
       nova.conf:
         DEFAULT:
           allow_resize_to_same_host: false
           debug: true
+          instances_path: 'Z:'
+          compute_driver: hyperv.nova.cluster.driver.HyperVClusterDriver
       neutron_hyperv_agent.conf:
         DEFAULT:
           debug: true
         SECURITYGROUP:
           enable_security_group: true
-HyperV2012r2_VHDX_fixed:
-  test_suite: images
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64-fixed.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda-fixed.vhdx.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012r2_VHDX_no_CoW:
-  test_suite: default
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          use_cow_images: false
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          use_cow_images: false
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012r2_VHDX_fixed_no_CoW:
-  test_suite: images
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64-fixed.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda-fixed.vhdx.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          use_cow_images: false
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          use_cow_images: false
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012r2_VHD:
-  test_suite: default
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhd.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhd.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012r2_VHD_fixed:
-  test_suite: images
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64-fixed.vhd.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda-fixed.vhd.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012r2_dynamic_memory:
-  test_suite: default
-  devstack:
-    live_migration: true
-    allow_resize_to_same_host: false
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
-  hosts:
-    NUCHV12R201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-        hyperv:
-          dynamic_memory_ratio: 1.5
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-    NUCHV12R202:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: false
-          debug: true
-        hyperv:
-          dynamic_memory_ratio: 1.5
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012_VHDX:
-  test_suite: default
-  devstack:
-    live_migration: false
-    allow_resize_to_same_host: true
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhdx.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhdx.gz
-  hosts:
-    NUCHV1201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: true
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-HyperV2012_VHD_v1:
-  test_suite: default
-  devstack:
-    live_migration: false
-    allow_resize_to_same_host: true
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhd.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhd.gz
-  hosts:
-    NUCHV1201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: true
-          debug: true
-        hyperv:
-          force_hyperv_utils_v1: true
-          force_volumeutils_v1: true
-          enable_instance_metrics_collection: false
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
-        AGENT:
-          enable_metrics_collection: false
-HyperV2008r2:
-  test_suite: 2008r2
-  include_default: false
-  devstack:
-    live_migration: false
-    allow_resize_to_same_host: true
-    image_url: https://raw.githubusercontent.com/cloudbase/ci-overcloud-init-scripts/master/scripts/devstack_vm/cirros-0.3.3-x86_64.vhd.gz
-    heat_image_url: https://www.cloudbase.it/downloads/Fedora-x86_64-20-20140618-sda.vhd.gz
-  hosts:
-    NUCHV08R201:
-      nova.conf:
-        DEFAULT:
-          allow_resize_to_same_host: true
-          debug: true
-      neutron_hyperv_agent.conf:
-        DEFAULT:
-          debug: true
