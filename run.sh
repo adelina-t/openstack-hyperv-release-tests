@@ -153,6 +153,14 @@ print ' '.join(['[%(k)s]=%(v)s' % {'k': k, 'v': v} for (k,v) in
                config[\"$test_name\"]['hosts'][\"$host_name\"][\"$host_config_file\"][\"$section_name\"].items()])"
 }
 
+function get_config_cluster() {
+    local test_name=$1
+    cat $config_file | python -c "import yaml;
+import sys;
+config=yaml.load(sys.stdin);
+print str(config[\"$test_name\"].get('cluster', False))"
+}
+
 function stack_devstack() {
     local log_dir=$1
     local ret_val=0
@@ -260,6 +268,20 @@ function setup_compute_host() {
     done
 }
 
+function setup_cluster() {
+    echo "Setting up cluster on nodes $@"
+    local win_host=$1
+    run_wsman_ps $win_host "cd $repo_dir\\windows; .\\setupcluster.ps1 -ClusterNodes $@"
+    echo "Cluster set up."
+}
+
+function destroy_cluster() {
+    echo "Destroying cluster"
+    local win_host=$1
+    run_wsman_ps $win_host "cd $repo_dir\\windows; .\\destroycluster.ps1"
+    echo "Cluster destroyed"
+}
+
 function enable_venv() {
     local venvdir=$1
 
@@ -302,7 +324,7 @@ export OS_PASSWORD=$DEVSTACK_PASSWORD
 export OS_TENANT_NAME=admin
 export OS_AUTH_URL=http://127.0.0.1:5000/v2.0
 
-git_repo_url="https://github.com/cloudbase/openstack-hyperv-release-tests"
+git_repo_url="https://github.com/adelina-t/openstack-hyperv-release-tests"
 repo_dir="C:\\Dev\\openstack-hyperv-release-tests"
 win_user=Administrator
 win_domain_user=Administrator@CLUSTER.CBSL
@@ -411,6 +433,13 @@ do
         pids+=("$!")
     done
 
+    is_clustered=(`get_config_cluster $test_name`)
+    if [ is_clustered = "True" ]; then
+        setup_kerberos_ticket $keytabfile
+        setup_cluster $host_names &
+        pids+=("$!")
+    fi
+
     for pid in ${pids[@]};
     do
         wait $pid
@@ -472,6 +501,11 @@ do
         exec_with_retry 5 0 get_win_hotfixes_log $host_name "$test_logs_dir/$host_name/hotfixes.log" &
         pids+=("$!")
     done
+
+    if [ is_clustered = "True" ]; then
+        destroy_cluster &
+        pids+=("$!")
+    fi
 
     exec_with_retry 5 0 unstack_devstack $DEVSTACK_LOGS_DIR &
     pids+=("$!")
