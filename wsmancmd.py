@@ -32,6 +32,7 @@ def parse_args():
     password = None
     url = None
     cmd = None
+    transport = None
 
     try:
         show_usage = False
@@ -45,6 +46,8 @@ def parse_args():
                 username = arg
             elif opt == "-p":
                 password = arg
+            elif opt == "-t":
+                transport = arg
 
         cmd = args
 
@@ -54,14 +57,14 @@ def parse_args():
     except getopt.GetoptError:
         print_usage()
 
-    return (url, username, password, cmd)
+    return (url, username, password, cmd, transport)
 
 
-def run_wsman_cmd(url, username, password, cmd):
+def run_wsman_cmd(url, username, password, cmd, transport='plaintext'):
     protocol.Protocol.DEFAULT_TIMEOUT = "PT3600S"
 
     p = protocol.Protocol(endpoint=url,
-                          transport='plaintext',
+                          transport=transport,
                           username=username,
                           password=password)
 
@@ -79,12 +82,16 @@ def run_wsman_cmd(url, username, password, cmd):
 def main():
     exit_code = 0
 
-    url, username, password, cmd = parse_args()
+    url, username, password, cmd, transport = parse_args()
     if not (url and username and password and cmd):
         exit_code = 1
     else:
-        std_out, std_err, exit_code = run_wsman_cmd(url, username, password,
-                                                    cmd)
+        if transport:
+            std_out, std_err, exit_code = run_wsman_cmd(url, username, password,
+                                                        cmd, transport)
+        else:
+            std_out, std_err, exit_code = run_wsman_cmd(url, username, password,
+                                                        cmd)
         sys.stdout.write(std_out)
         sys.stderr.write(std_err)
 

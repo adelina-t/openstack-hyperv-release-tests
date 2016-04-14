@@ -5,8 +5,10 @@ BASEDIR=$(dirname $0)
 
 function run_wsman_cmd() {
     local host=$1
-    local cmd=$2
-    $BASEDIR/wsmancmd.py -u $win_user -p $win_password -U https://$1:5986/wsman $cmd
+    local user=$2
+    local transport=$3
+    local cmd=$4
+    $BASEDIR/wsmancmd.py -u $user -p $win_password -t $transport -U https://$1:5986/wsman $cmd
 }
 
 function get_win_files() {
@@ -19,7 +21,13 @@ function get_win_files() {
 function run_wsman_ps() {
     local host=$1
     local cmd=$2
-    run_wsman_cmd $host "powershell -NonInteractive -ExecutionPolicy RemoteSigned -Command $cmd"
+    run_wsman_cmd $host $win_user "plaintext" "powershell -NonInteractive -ExecutionPolicy RemoteSigned -Command $cmd"
+}
+
+function run_wsman_ps_as_domain() {
+    local host=$1
+    local cmd=$2
+    run_wsman_cmd $host $win_domain_user "kerberos" "powershell -NonInteractive -ExecutionPolicy RemoteSigned -Command $cmd"
 }
 
 function reboot_win_host() {

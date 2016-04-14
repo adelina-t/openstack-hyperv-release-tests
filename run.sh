@@ -269,6 +269,12 @@ function enable_venv() {
     source "$venvdir/bin/activate"
 }
 
+function setup_kerberos_ticket() {
+    local keytabfile=$1
+
+    kinit $win_domain_user -k -t $1
+}
+
 msi_url=$1
 DEVSTACK_BRANCH=${2:-"stable/icehouse"}
 test_suite_override=${3}
@@ -299,7 +305,9 @@ export OS_AUTH_URL=http://127.0.0.1:5000/v2.0
 git_repo_url="https://github.com/cloudbase/openstack-hyperv-release-tests"
 repo_dir="C:\\Dev\\openstack-hyperv-release-tests"
 win_user=Administrator
+win_domain_user=Administrator@CLUSTER.CBSL
 win_password=Passw0rd
+keytabfile="$HOME/administrator.keytab"
 host_config_dir="C:\\OpenStack\\cloudbase\\nova\\etc"
 host_logs_dir="/OpenStack/Log"
 devstack_dir="$HOME/devstack"
