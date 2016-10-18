@@ -10,6 +10,9 @@ if ($s) {
 
     ovs-vsctl --if-exists del-br br-tun
     ovs-vsctl --if-exists del-br br-int
+
+    # disable the ovs extension
+    DisableSwitchOVSExtension
 }
 
 try {

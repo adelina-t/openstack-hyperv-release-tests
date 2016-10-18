@@ -52,6 +52,11 @@ if ($UseOvs) {
     if ($s) {
         Stop-Service $s
     }
+
+    # enable OVS extension on the vswitch before creating the OVS service
+    EnableSwitchOVSExtension
+
+    # creating ovs agent service
     Write-Host "Setting up ovs-agent service"
     cmd.exe /c .\create_ovs_service.cmd
 

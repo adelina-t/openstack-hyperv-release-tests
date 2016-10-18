@@ -233,4 +233,15 @@ function InstallZip($ZipPath, $DevstackHost, $Password)
     echo "$zipPath successfully installed!"
 }
 
+function EnableSwitchOVSExtension($switch='external')
+{
+    Get-VmSwitch -Name $switch | Enable-VMSwitchExtension -Name "Open vSwitch Extension"
+}
+
+function DisableSwitchOVSExtension($switch='external')
+{
+    Get-VmSwitch -Name $switch | Disable-VMSwitchExtension -Name "Open vSwitch Extension"
+}
+
+
 Export-ModuleMember -function *
