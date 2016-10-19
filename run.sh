@@ -360,6 +360,11 @@ container_test_dir="$HOME/openstack-hyperv-release-tests"
 run_ssh $DEVSTACK_IP_ADDR "rm -rf $container_test_dir" $ssh_key
 run_ssh $DEVSTACK_IP_ADDR "git clone $git_repo_url $container_test_dir" $ssh_key
 run_ssh $DEVSTACK_IP_ADDR "source $container_test_dir/utils.sh ; clone_pull_repo  $devstack_dir 'https://github.com/openstack-dev/devstack.git' $DEVSTACK_BRANCH" $ssh_key
+if [[ $DEVSTACK_BRANCH == "master" || $DEVSTACK_BRANCH == "stable/newton" ]];
+then
+    run_ssh $DEVSTACK_IP_ADDR "cd $devstack_dir && git config --global user.name 'NUC CI' &&  git config --global user.email 'nuc_ci@mail.test' && git fetch 'http://github.com/adelina-t/devstack' 'revert_commit_b3a210f' && git cherry-pick FETCH_HEAD" $ssh_key
+fi
+
 run_ssh $DEVSTACK_IP_ADDR "source $container_test_dir/utils.sh ; pull_all_git_repos $stack_base_dir $DEVSTACK_BRANCH" $ssh_key
 
 # create temporary remote log dir
