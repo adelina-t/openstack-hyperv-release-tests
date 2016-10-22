@@ -1,7 +1,3 @@
-# Unsupported consoles (Hyper-V uses RDP, not VNC or SPICE)
-tempest.api.compute.v3.servers.test_server_actions.ServerActionsV3Test.test_get_spice_console
-tempest.api.compute.v3.servers.test_server_actions.ServerActionsV3Test.test_get_vnc_console
-
 # See Tempest bug: https://bugs.launchpad.net/tempest/+bug/1363986
 tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_cross_tenant_traffic
 tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_multiple_security_groups
@@ -9,8 +5,3 @@ tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_
 tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_port_security_disable_security_group
 tempest.scenario.test_security_groups_basic_ops.TestSecurityGroupsBasicOps.test_in_tenant_traffic
 
-# current version of cirros does not have the ping6 command.
-tempest.scenario.test_network_v6.TestGettingAddress
-
-# exclude tests due to bug: https://bugs.launchpad.net/tempest/+bug/1582730
-tempest.api.compute.volumes.test_attach_volume.AttachVolumeShelveTestJSON
